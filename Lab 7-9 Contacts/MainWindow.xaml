@@ -1,29 +1,61 @@
 ﻿<Window x:Class="Contacts.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Contacts" Height="450" Width="650">
+        Title="Contacts" Height="730" Width="650">
     <Grid Margin="10">
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="300"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <!-- Data Grid to display our collection -->
-        <DataGrid x:Name="ContactsGrid" AutoGenerateColumns="True" IsReadOnly="True" Grid.Row="0" Margin="0,0,0,10"/>
+        <DataGrid x:Name="ContactsGrid" AutoGenerateColumns="True" IsReadOnly="True" Grid.Row="0" Margin="0,0,0,0"/>
 
-        <!-- Action Buttons for LINQ queries -->
-        <WrapPanel Grid.Row="1" Margin="0,10,0,10" HorizontalAlignment="Center">
+        <WrapPanel Grid.Row="1" Margin="0,5,0,10" HorizontalAlignment="Center">
+            <Button Content="Add Contact" Margin="5" Padding="5" Click="Add_Click"/>
+            <Button Content="Edit Contact" Margin="5" Padding="5" Click="Edit_Click"/>
+            <Button Content="Delete Contact" Margin="5" Padding="5" Click="Delete_Click"/>
+        </WrapPanel>
+
+            <!-- Action Buttons for LINQ queries -->
+        <WrapPanel Grid.Row="2" Margin="0,5,0,5" HorizontalAlignment="Center">
             <Button Content="Filter (> 30 yrs)" Click="Filter_Click" Margin="5" Padding="5"/>
+            <Button Content="Filter (&lt; 30 yrs)" Click="Filter_Below30" Margin="5" Padding="5"/>
+            <Button Content="Filter (= 30 yrs)" Click="Filter_Equal30" Margin="5" Padding="5"/>
+        </WrapPanel>
+        <WrapPanel Grid.Row="3" Margin="0,5,0,5" HorizontalAlignment="Center">
             <Button Content="Sort Asc (Name)" Click="SortAsc_Click" Margin="5" Padding="5"/>
             <Button Content="Sort Desc (Name)" Click="SortDesc_Click" Margin="5" Padding="5"/>
+            <Button Content="Sort Asc (Age)" Click="SortByAge_Click" Margin="5" Padding="5"/>
+            <Button Content="Sort Desc (Age)" Click="SortByAgeDesc_Click" Margin="5" Padding="5"/>
+        </WrapPanel>
+        <WrapPanel Grid.Row="4" Margin="0,5,0,5" HorizontalAlignment="Center">
             <Button Content="Project (Names)" Click="Project_Click" Margin="5" Padding="5"/>
+            <Button Content="Project (City)" Click="Project_City_Click" Margin="5" Padding="5"/>
+            <Button Content="Project (Name &amp; Age)" Click="Project_NameAge_Click" Margin="5" Padding="5"/>
+        </WrapPanel>
+        <WrapPanel Grid.Row="5" Margin="0,5,0,5" HorizontalAlignment="Center">
             <Button Content="Check (Any from NY?)" Click="Check_Click" Margin="5" Padding="5"/>
+            <Button Content="Check (All above 20?)" Click="Check_AllAbove20_Click" Margin="5" Padding="5"/>
+            <Button Content="Check (Any above 40?)" Click="Check_AnyAbove40_Click" Margin="5" Padding="5"/>
+        </WrapPanel>
+        <WrapPanel Grid.Row="6" Margin="0,5,0,5" HorizontalAlignment="Center">
             <Button Content="Aggregate (Avg Age)" Click="Aggregate_Click" Margin="5" Padding="5"/>
+            <Button Content="Aggregate (Count)" Click="Aggregate_Count_Click" Margin="5" Padding="5"/>
+            <Button Content="Aggregate (Max Age)" Click="Aggregate_Max_Click" Margin="5" Padding="5"/>
+        </WrapPanel>
+        <WrapPanel Grid.Row="7" Margin="0,5,0,5" HorizontalAlignment="Center">
             <Button Content="Reset List" Click="Reset_Click" Margin="5" Padding="5" Background="LightGray"/>
         </WrapPanel>
 
         <!-- Text block to show results from projections, quantifiers, and aggregations -->
-        <TextBlock x:Name="ResultText" Grid.Row="2" FontWeight="Bold" FontSize="14" HorizontalAlignment="Center" Foreground="Blue"/>
+        <TextBlock x:Name="ResultText" Grid.Row="8" FontWeight="Bold" FontSize="14" HorizontalAlignment="Center" Foreground="Blue"/>
     </Grid>
 </Window>
