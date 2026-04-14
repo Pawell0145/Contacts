@@ -1,5 +1,4 @@
-﻿using Contacts;
-using System.Windows;
+﻿using System.Windows;
 
 namespace Lab_7_9_Contacts
 {
@@ -7,11 +6,13 @@ namespace Lab_7_9_Contacts
     {
         private bool _isEditMode;
         private Person _personToEdit;
+        private AppDbContext _context;
 
         public ContactAdd(Person personToEdit = null)
         {
             InitializeComponent();
             
+            _context = new AppDbContext();
             _personToEdit = personToEdit;
             _isEditMode = _personToEdit != null;
 
@@ -45,7 +46,7 @@ namespace Lab_7_9_Contacts
                 MessageBox.Show("Please enter a valid number for Age and Phone.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-            if ( phone > 999999999 || phone < 100000000)
+            if (phone > 999999999 || phone < 100000000)
             {
                 MessageBox.Show("Please enter a valid 9-digit phone number.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
@@ -53,18 +54,16 @@ namespace Lab_7_9_Contacts
 
             if (_isEditMode)
             {
+                // Update existing contact
                 _personToEdit.Name = NameTextBox.Text;
                 _personToEdit.Age = age;
                 _personToEdit.City = CityTextBox.Text;
                 _personToEdit.Phone = phone;
-
-                if (Application.Current.MainWindow is MainWindow mainWindow)
-                {
-                    mainWindow.RefreshGrid();
-                }
+                _context.SaveChanges();
             }
             else
             {
+                // Create new contact
                 var newPerson = new Person
                 {
                     Name = NameTextBox.Text,
@@ -72,19 +71,22 @@ namespace Lab_7_9_Contacts
                     City = CityTextBox.Text,
                     Phone = phone
                 };
-
-                if (Application.Current.MainWindow is MainWindow mainWindow)
-                {
-                    mainWindow.AddPerson(newPerson);
-                }
+                _context.People.Add(newPerson);
+                _context.SaveChanges();
             }
 
-            Close();
+            this.Close();
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
-            Close();
+            this.Close();
+        }
+
+        protected override void OnClosed(System.EventArgs e)
+        {
+            _context?.Dispose();
+            base.OnClosed(e);
         }
     }
 }
