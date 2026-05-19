@@ -5,7 +5,7 @@ namespace Lab_7_9_Contacts
     public partial class ContactAdd : Window
     {
         private bool _isEditMode;
-        private Person _personToEdit;
+        private Person _currentPerson;
         private AppDbContext _context;
 
         public ContactAdd(Person personToEdit = null)
@@ -13,40 +13,26 @@ namespace Lab_7_9_Contacts
             InitializeComponent();
             
             _context = new AppDbContext();
-            _personToEdit = personToEdit;
-            _isEditMode = _personToEdit != null;
+            
+            _currentPerson = personToEdit ?? new Person();
+            _isEditMode = personToEdit != null;
 
-            if (_isEditMode)
-            {
-                NameTextBox.Text = _personToEdit.Name;
-                AgeTextBox.Text = _personToEdit.Age.ToString();
-                CityTextBox.Text = _personToEdit.City;
-                PhoneTextBox.Text = _personToEdit.Phone.ToString();
-                this.Title = "Edit Contact";
-            }
-            else
-            {
-                this.Title = "Add Contact";
-            }
+            this.Title = _isEditMode ? "Edit Contact" : "Add Contact";
+            
+            this.DataContext = _currentPerson;
         }
 
         private void SaveContact_Click(object sender, RoutedEventArgs e)
         {
-            // Validation
-            if (string.IsNullOrWhiteSpace(NameTextBox.Text) ||
-                string.IsNullOrWhiteSpace(AgeTextBox.Text) ||
-                string.IsNullOrWhiteSpace(CityTextBox.Text) ||
-                string.IsNullOrWhiteSpace(PhoneTextBox.Text))
+            //validation
+            if (string.IsNullOrWhiteSpace(_currentPerson.Name) ||
+                string.IsNullOrWhiteSpace(_currentPerson.City))
             {
-                MessageBox.Show("Please fill in all fields.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Please fill in required fields (Name and City).", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-            if (!int.TryParse(AgeTextBox.Text, out int age) || !int.TryParse(PhoneTextBox.Text, out int phone))
-            {
-                MessageBox.Show("Please enter a valid number for Age and Phone.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-            if (phone > 999999999 || phone < 100000000)
+
+            if (_currentPerson.Phone > 999999999 || _currentPerson.Phone < 100000000)
             {
                 MessageBox.Show("Please enter a valid 9-digit phone number.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
@@ -54,27 +40,16 @@ namespace Lab_7_9_Contacts
 
             if (_isEditMode)
             {
-                // Update existing contact
-                _personToEdit.Name = NameTextBox.Text;
-                _personToEdit.Age = age;
-                _personToEdit.City = CityTextBox.Text;
-                _personToEdit.Phone = phone;
-                _context.SaveChanges();
+                // The entity is already bound to the UI, so it has the new values
+                _context.People.Update(_currentPerson);
             }
             else
             {
-                // Create new contact
-                var newPerson = new Person
-                {
-                    Name = NameTextBox.Text,
-                    Age = age,
-                    City = CityTextBox.Text,
-                    Phone = phone
-                };
-                _context.People.Add(newPerson);
-                _context.SaveChanges();
+                // Adding new person
+                _context.People.Add(_currentPerson);
             }
 
+            _context.SaveChanges();
             this.Close();
         }
 

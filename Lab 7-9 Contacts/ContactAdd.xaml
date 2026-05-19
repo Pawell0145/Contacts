@@ -16,19 +16,19 @@
         <WrapPanel Grid.Row="0" Margin="0,10,0,10" HorizontalAlignment="Center">
             <StackPanel Margin="10">
                 <TextBlock Text="Name:" FontWeight="Bold"/>
-                <TextBox x:Name="NameTextBox" Width="200"/>
+                <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
             </StackPanel>
             <StackPanel Margin="10">
                 <TextBlock Text="Age:" FontWeight="Bold"/>
-                <TextBox x:Name="AgeTextBox" Width="200"/>
+                <TextBox Text="{Binding Age, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
             </StackPanel>
             <StackPanel Margin="10">
                 <TextBlock Text="City:" FontWeight="Bold"/>
-                <TextBox x:Name="CityTextBox" Width="200"/>
+                <TextBox Text="{Binding City, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
             </StackPanel>
             <StackPanel Margin="10">
                 <TextBlock Text="Phone:" FontWeight="Bold"/>
-                <TextBox x:Name="PhoneTextBox" Width="200"/>
+                <TextBox Text="{Binding Phone, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
             </StackPanel>
         </WrapPanel>
 
